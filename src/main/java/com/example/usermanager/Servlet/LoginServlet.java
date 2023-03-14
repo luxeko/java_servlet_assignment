@@ -1,0 +1,41 @@
+package com.example.usermanager.Servlet;
+
+import com.example.usermanager.Controllers.UserController;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.annotation.*;
+import java.io.IOException;
+import java.util.List;
+
+@WebServlet(name = "LoginServlet", value = "/LoginServlet")
+public class LoginServlet extends HttpServlet {
+    UserController userController;
+
+    @Override
+    public void init() throws ServletException {
+        userController = new UserController();
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.sendRedirect("UserServlet");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        boolean checkLogin = userController.login(email, password);
+        if (checkLogin) {
+            HttpSession session = request.getSession();
+            session.setAttribute("current_user", email);
+            doGet(request, response);
+        } else {
+            request.setAttribute("error_login", "Login fail");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            dispatcher.forward(request, response);
+        }
+
+    }
+}
