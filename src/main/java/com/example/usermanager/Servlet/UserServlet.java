@@ -1,21 +1,27 @@
 package com.example.usermanager.Servlet;
 
+import com.example.usermanager.Controllers.CourseController;
 import com.example.usermanager.Controllers.UserController;
+import com.example.usermanager.Models.CourseModel;
 import com.example.usermanager.Models.UserModel;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet(name = "UserServlet", value = "/UserServlet")
 public class UserServlet extends HttpServlet {
     UserController userController;
-
+    CourseController courseController;
     @Override
     public void init() throws ServletException {
         userController = new UserController();
+        courseController = new CourseController();
     }
 
     @Override
@@ -25,6 +31,8 @@ public class UserServlet extends HttpServlet {
         System.out.println(action);
         if (action != null) {
             if (action.equals("add")) {
+                List<CourseModel> listCourse = courseController.getAll();
+                request.setAttribute("listCourse", listCourse);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("users/addUser.jsp");
                 dispatcher.forward(request, response);
             } else if (action.equals("edit")) {
@@ -46,6 +54,31 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        String email = request.getParameter("email");
+        String name = request.getParameter("name");
+        String password = request.getParameter("password");
+        String country = request.getParameter("country");
+        String id = request.getParameter("id");
+        String[] courses = request.getParameterValues("listCourse");
+        // print the response
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.write("<html><body>");
+        out.write("<h2>Servlet HTTP Request Parameters example</h2>");
+        out.write("<p>paramArray: " + Arrays.toString(courses) + "</p>");
+//        for (String course: courses) {
+//            System.out.println(course);
+//        }
+//        if (id != null && !id.equals("")) {
+//            // update
+//            UserModel userModel = userController.getUserById(Integer.parseInt(id));
+//        } else {
+//            UserModel userModel = new UserModel();
+//            userModel.setEmail(email);
+//            userModel.setName(name);
+//            userModel.setCountry(country);
+//            userModel.setPassword(password);
+//            userController.create(userModel);
+//        }
     }
 }

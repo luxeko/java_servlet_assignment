@@ -140,4 +140,8 @@ public class CourseController {
             throw new RuntimeException(e);
         }
     }
+
+    public void createUserCourse() {
+
+    }
 }
