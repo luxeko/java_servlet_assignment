@@ -187,4 +187,26 @@ public class CourseController {
         }
         return arrlist;
     }
+
+//    public boolean checkSingIn(int courseId, int userId) {
+//        Connection connection = getConnection();
+//        String sql = "select * from users_courses where courseId = ? and userId = ?";
+//        boolean check = false;
+//        try {
+//            PreparedStatement ps = connection.prepareStatement(sql);
+//            ps.setInt(1, courseId);
+//            ps.setInt(2, userId);
+//            ResultSet resultSet = ps.executeQuery();
+//            while (resultSet.next()) {
+//                check = true;
+//                break;
+//            }
+//            ps.close();
+//            resultSet.close();
+//            connection.close();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return check;
+//    }
 }

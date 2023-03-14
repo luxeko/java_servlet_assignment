@@ -29,7 +29,6 @@ public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
         String action = request.getParameter("action");
-        System.out.println(action);
         if (action != null) {
             if (action.equals("add")) {
                 List<CourseModel> listCourse = courseController.getAll();
@@ -46,14 +45,26 @@ public class UserServlet extends HttpServlet {
                 response.sendRedirect("UserServlet");
             }
         } else {
-            List<UserModel> users = userController.getAll();
-            for (UserModel user: users) {
-                List<String> array = courseController.getUserCourseByUserId(user.getId());
-                user.setCourseName(array);
+            String search = request.getParameter("search");
+            if (search != null && !search.equals("")) {
+                List<UserModel> users = userController.getUserByRequest(search);
+                for (UserModel user: users) {
+                    List<String> array = courseController.getUserCourseByUserId(user.getId());
+                    user.setCourseName(array);
+                }
+                request.setAttribute("users", users);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("users/listUser.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                List<UserModel> users = userController.getAll();
+                for (UserModel user: users) {
+                    List<String> array = courseController.getUserCourseByUserId(user.getId());
+                    user.setCourseName(array);
+                }
+                request.setAttribute("users", users);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("users/listUser.jsp");
+                dispatcher.forward(request, response);
             }
-            request.setAttribute("users", users);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("users/listUser.jsp");
-            dispatcher.forward(request, response);
         }
     }
 
@@ -63,8 +74,8 @@ public class UserServlet extends HttpServlet {
         String name = request.getParameter("name");
         String password = request.getParameter("password");
         String country = request.getParameter("country");
+        String role = request.getParameter("role");
         String id = request.getParameter("id");
-        String[] courses = request.getParameterValues("listCourse");
 
         if (id != null && !id.equals("")) {
             // update
@@ -75,11 +86,9 @@ public class UserServlet extends HttpServlet {
             userModel.setName(name);
             userModel.setCountry(country);
             userModel.setPassword(password);
+            userModel.setRole(role);
             userController.create(userModel);
             int userId = userModel.getId();
-            for (String course : courses) {
-                courseController.createUserCourse(userId, Integer.parseInt(course));
-            }
         }
         response.sendRedirect("UserServlet");
     }

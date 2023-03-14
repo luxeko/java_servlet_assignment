@@ -1,6 +1,7 @@
 package com.example.usermanager.Servlet;
 
 import com.example.usermanager.Controllers.UserController;
+import com.example.usermanager.Models.UserModel;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -28,8 +29,11 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         boolean checkLogin = userController.login(email, password);
         if (checkLogin) {
+            UserModel userModel = userController.getRoleByEmail(email);
             HttpSession session = request.getSession();
             session.setAttribute("current_user", email);
+            session.setAttribute("role", userModel.getRole());
+            session.setAttribute("userId", userModel.getId());
             doGet(request, response);
         } else {
             request.setAttribute("error_login", "Login fail");

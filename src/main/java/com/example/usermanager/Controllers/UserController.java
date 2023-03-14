@@ -76,8 +76,8 @@ public class UserController {
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 String country = resultSet.getString("country");
-
-                users.add(new UserModel(id, name, email, country));
+                String role = resultSet.getString("role");
+                users.add(new UserModel(id, name, email, country, role));
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -85,10 +85,34 @@ public class UserController {
         }
         return users;
     }
-
+    public List<UserModel> getUserByRequest(String search) {
+        Connection connection = getConnection();
+        List<UserModel> users = new ArrayList<>();
+        String sql = "select * from users where name LIKE ? or email LIKE ? or country LIKE ? or role LIKE ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, search);
+            preparedStatement.setString(2, search);
+            preparedStatement.setString(3, search);
+            preparedStatement.setString(4, search);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String country = resultSet.getString("country");
+                String role = resultSet.getString("role");
+                users.add(new UserModel(id, name, email, country, role));
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return users;
+    }
     public void create(UserModel userModel) {
         Connection connection = getConnection();
-        String insert = "insert into users(name, email, password, country) values(?, ?, ?, ?)";
+        String insert = "insert into users(name, email, password, country, role) values(?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
             String hasPassword = encryptThisString(userModel.getPassword());
@@ -96,6 +120,7 @@ public class UserController {
             ps.setString(2, userModel.getEmail());
             ps.setString(3, hasPassword);
             ps.setString(4, userModel.getCountry());
+            ps.setString(5, userModel.getRole());
 
             ps.execute();
             ResultSet generatedKeys = ps.getGeneratedKeys();
@@ -175,5 +200,31 @@ public class UserController {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public UserModel getRoleByEmail(String email) {
+        Connection connection = getConnection();
+        String sql = "select * from users where email = ?";
+        UserModel userModel = new UserModel();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String role = resultSet.getString("role");
+                int id = resultSet.getInt("id");
+                userModel.setRole(role);
+                userModel.setId(id);
+            }
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return userModel;
+    }
+    public boolean checkEmailExist(String email) {
+        return false;
     }
 }

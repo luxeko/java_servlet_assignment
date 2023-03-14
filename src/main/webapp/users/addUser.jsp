@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 <head>
-    <title>Add users</title>
+    <title>Add user</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="description" content=""/>
@@ -18,8 +18,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
             integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -41,13 +39,11 @@
             <input type="text" class="form-control" name="country" id="country">
         </div>
         <div class="mb-3">
-            <label for="validationCourses" class="form-label">Courses</label>
-            <select class="form-select select2_course" name="listCourse" id="validationCourses" multiple="multiple">
-                <c:forEach items="${listCourse}" var="course" varStatus="loop">
-                    <option value="<c:out value="${course.id}"></c:out>">
-                        <c:out value="${course.name}"></c:out>
-                    </option>
-                </c:forEach>
+            <label for="role" class="form-label">Role</label>
+            <select class="form-select" name="role" id="role">
+                <option value="" selected>Choose</option>
+                <option value="student">Student</option>
+                <option value="admin">Admin</option>
             </select>
         </div>
         <div class="mb-3" id="input-password">
@@ -58,11 +54,11 @@
             <label for="re-password" class="form-label"><span class="text-danger">*</span>Re-Password</label>
             <input type="password" class="form-control" id="re-password">
         </div>
-        <div class="mb-3 d-flex justify-content-end">
-            <button type="submit" class="btn btn-success me-3"><i class="bi bi-plus-lg"></i>
+        <div class="mt-4 d-flex justify-content-start">
+            <button type="reset" class="btn btn-light  me-3"><i class="bi bi-arrow-clockwise"></i> Reset</button>
+            <button type="submit" class="btn btn-success"><i class="bi bi-plus-lg"></i>
                 Create
             </button>
-            <button type="reset" class="btn btn-light"><i class="bi bi-arrow-clockwise"></i> Reset</button>
         </div>
     </form>
 </div>
@@ -87,7 +83,6 @@
         $('#re-password').on('input', function () {
             rePassword = $(this).val();
         })
-        $('.select2_course').select2()
         $('#createUser').on('submit', function (e) {
             e.preventDefault();
             $('.error_email').remove();

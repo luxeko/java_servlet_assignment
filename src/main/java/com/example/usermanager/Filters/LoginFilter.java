@@ -31,6 +31,7 @@ public class LoginFilter implements Filter {
             chain.doFilter(request, response);
         } else {
             String currentUser = (String) session.getAttribute("current_user");
+            String role = (String) session.getAttribute("role");
             if (currentUser == null || currentUser.equals("")) {
                 // chua login
                 if (path.contains("index.jsp")) {
@@ -39,8 +40,17 @@ public class LoginFilter implements Filter {
                     resp.sendRedirect("index.jsp");
                 }
             } else if (path.contains("index.jsp")) {
-                // da login nhung van muon vao trang login
-                resp.sendRedirect("UserServlet");
+                if (role.equals("admin")) {
+                    resp.sendRedirect("UserServlet");
+                } else {
+                    resp.sendRedirect("CourseServlet");
+                }
+            } else if (path.contains("UserServlet")) {
+                if (role.equals("admin")) {
+                    chain.doFilter(request, response);
+                } else {
+                    resp.sendRedirect("CourseServlet");
+                }
             } else {
                 chain.doFilter(request, response);
             }
