@@ -27,7 +27,7 @@
 <div class="container mt-4">
     <h3><a href="UserServlet" class="text-decoration-none text-success">Users</a> <i class="bi bi-arrow-right"></i> Add
         user</h3>
-    <form action="UserServlet" method="POST" id="createUser" enctype="multipart/form-data">
+    <form action="UserServlet" method="POST" id="createUser" enctype="application/x-www-form-urlencoded">
         <div class="mb-3" id="input_email">
             <label for="email" class="form-label"><span class="text-danger">*</span>Email</label>
             <input type="email" class="form-control" name="email" id="email">
@@ -42,8 +42,7 @@
         </div>
         <div class="mb-3">
             <label for="validationCourses" class="form-label">Courses</label>
-            <select class="form-select select2_course" name="listCourse" id="validationCourses"
-                    multiple="multiple">
+            <select class="form-select select2_course" name="listCourse" id="validationCourses" multiple="multiple">
                 <c:forEach items="${listCourse}" var="course" varStatus="loop">
                     <option value="<c:out value="${course.id}"></c:out>">
                         <c:out value="${course.name}"></c:out>
@@ -88,20 +87,7 @@
         $('#re-password').on('input', function () {
             rePassword = $(this).val();
         })
-        $('.select2_course').select2({
-            createTag: (params) => {
-                let term = $.trim(params.term);
-
-                if (term === '') {
-                    return null;
-                }
-                return {
-                    id: term,
-                    text: term,
-                    newTag: true // add additional parameters
-                }
-            }
-        })
+        $('.select2_course').select2()
         $('#createUser').on('submit', function (e) {
             e.preventDefault();
             $('.error_email').remove();

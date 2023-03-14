@@ -30,6 +30,7 @@
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Country</th>
+            <th scope="col">Courses</th>
             <th class="text-center" scope="col">Action</th>
         </tr>
         </thead>
@@ -40,6 +41,11 @@
                 <td class="align-middle"><c:out value="${user.name}"/></td>
                 <td class="align-middle"><c:out value="${user.email}"/></td>
                 <td class="align-middle"><c:out value="${user.country}"/></td>
+                <td class="align-middle">
+                    <c:forEach items="${user.courseName}" var="course">
+                        <span class="badge text-bg-success p-2"><c:out value="${course}"></c:out> </span>
+                    </c:forEach>
+                </td>
                 <td class="align-middle">
                     <div class="d-flex justify-content-center align-items-center">
                         <a href="#" class="btn btn-primary me-2"><i class="bi bi-pencil"></i></a>

@@ -141,7 +141,50 @@ public class CourseController {
         }
     }
 
-    public void createUserCourse() {
+    public void createUserCourse(int userId, int courseId) {
+        Connection connection = getConnection();
+        String insert = "insert into users_courses(userId, courseId) values(?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(insert);
+            ps.setInt(1, userId);
+            ps.setInt(2, courseId);
+            ps.execute();
+            ps.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
+    public List<String> getUserCourseByUserId(int userId) {
+        Connection connection = getConnection();
+        List<String> arrlist = new ArrayList<>();
+        String select = "SELECT courses.name FROM courses INNER JOIN users_courses on courses.id = users_courses" +
+                ".courseId INNER JOIN users ON users.id = users_courses.userId WHERE users.id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(select);
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                arrlist.add(resultSet.getString("name"));
+            }
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return arrlist;
     }
 }

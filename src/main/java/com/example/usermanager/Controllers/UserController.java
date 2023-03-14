@@ -90,7 +90,7 @@ public class UserController {
         Connection connection = getConnection();
         String insert = "insert into users(name, email, password, country) values(?, ?, ?, ?)";
         try {
-            PreparedStatement ps = connection.prepareStatement(insert);
+            PreparedStatement ps = connection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
             String hasPassword = encryptThisString(userModel.getPassword());
             ps.setString(1, userModel.getName());
             ps.setString(2, userModel.getEmail());
@@ -98,6 +98,10 @@ public class UserController {
             ps.setString(4, userModel.getCountry());
 
             ps.execute();
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                userModel.setId(generatedKeys.getInt(1));
+            }
             ps.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -1,8 +1,11 @@
 package com.example.usermanager.Models;
 
+import java.util.List;
+
 public class UserModel {
     private int id;
     private String name, email, country, password;
+    private List<String> courseName;
 
     public UserModel() {
     }
@@ -53,5 +56,13 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<String> getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(List<String> courseName) {
+        this.courseName = courseName;
     }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 public class UserServlet extends HttpServlet {
     UserController userController;
     CourseController courseController;
+
     @Override
     public void init() throws ServletException {
         userController = new UserController();
@@ -46,6 +47,10 @@ public class UserServlet extends HttpServlet {
             }
         } else {
             List<UserModel> users = userController.getAll();
+            for (UserModel user: users) {
+                List<String> array = courseController.getUserCourseByUserId(user.getId());
+                user.setCourseName(array);
+            }
             request.setAttribute("users", users);
             RequestDispatcher dispatcher = request.getRequestDispatcher("users/listUser.jsp");
             dispatcher.forward(request, response);
@@ -60,25 +65,22 @@ public class UserServlet extends HttpServlet {
         String country = request.getParameter("country");
         String id = request.getParameter("id");
         String[] courses = request.getParameterValues("listCourse");
-        // print the response
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.write("<html><body>");
-        out.write("<h2>Servlet HTTP Request Parameters example</h2>");
-        out.write("<p>paramArray: " + Arrays.toString(courses) + "</p>");
-//        for (String course: courses) {
-//            System.out.println(course);
-//        }
-//        if (id != null && !id.equals("")) {
-//            // update
-//            UserModel userModel = userController.getUserById(Integer.parseInt(id));
-//        } else {
-//            UserModel userModel = new UserModel();
-//            userModel.setEmail(email);
-//            userModel.setName(name);
-//            userModel.setCountry(country);
-//            userModel.setPassword(password);
-//            userController.create(userModel);
-//        }
+
+        if (id != null && !id.equals("")) {
+            // update
+            UserModel userModel = userController.getUserById(Integer.parseInt(id));
+        } else {
+            UserModel userModel = new UserModel();
+            userModel.setEmail(email);
+            userModel.setName(name);
+            userModel.setCountry(country);
+            userModel.setPassword(password);
+            userController.create(userModel);
+            int userId = userModel.getId();
+            for (String course : courses) {
+                courseController.createUserCourse(userId, Integer.parseInt(course));
+            }
+        }
+        response.sendRedirect("UserServlet");
     }
 }
