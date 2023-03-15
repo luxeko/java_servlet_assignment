@@ -30,14 +30,14 @@
     session.removeAttribute("success");
 %>
 <section>
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-lg-4">
+    <div class="container my-5">
+        <div class="row" style="height: max-content;">
+            <div class="col-lg-4" style="position: sticky; top: 70px; height: 500px">
                 <div class="card mb-4" style="box-shadow: -7px 7px 0 #198754;">
                     <div class="card-body text-center">
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                        <img src="${pageContext.request.contextPath}/assets/avatar.jpg"
                              alt="avatar"
-                             class="rounded-circle img-fluid" style="width: 150px;">
+                             class="rounded-circle img-fluid" style="width: 150px; aspect-ratio: 12/11">
                         <h5 class="my-3"><c:out value="${user.name}"></c:out></h5>
                         <p class="text-muted mb-1"><c:out value="${user.role}"></c:out></p>
                         <p class="text-muted mb-4"><c:out value="${user.country}"></c:out></p>
@@ -47,20 +47,26 @@
                     <div class="card-body p-0">
                         <ul class="list-group list-group-flush rounded-3">
                             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                <i class="fas fa-globe fa-lg text-warning"></i>
-                                <p class="mb-0">https://mdbootstrap.com</p>
+                                <i class="bi bi-paypal text-primary"></i>
+                                <a style="cursor: pointer"
+                                   class="mb-0 text-decoration-none text-primary">https://paypal.me/luxeko1999</a>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                                 <i class="fab fa-github fa-lg" style="color: #333333;"></i>
-                                <p class="mb-0">mdbootstrap</p>
+                                <a style="cursor: pointer"
+                                   class="mb-0 text-decoration-none text-primary">https://github.com/luxeko</a>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                                 <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
-                                <p class="mb-0">mdbootstrap</p>
+                                <a style="cursor: pointer"
+                                   class="mb-0 text-decoration-none text-primary">https://www.facebook
+                                    .com/caubelamli2/</a>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                                 <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
-                                <p class="mb-0">mdbootstrap</p>
+                                <a style="cursor: pointer"
+                                   class="mb-0 text-decoration-none text-primary ">https://www.instagram.com/_xeko_1
+                                    .9/</a>
                             </li>
                         </ul>
                     </div>
@@ -120,14 +126,14 @@
                         <div class="card mb-4 mb-md-0" style="box-shadow: -7px 7px 0 #198754;">
                             <div class="card-body">
                                 <h4 class="mb-4"><span class="text-success font-italic me-1">
-                                    My</span>Course List
+                                    Course</span>List
                                 </h4>
                                 <c:forEach items="${courses}" var="course" varStatus="loop">
                                     <div class="mb-4 course">
                                         <p class="mb-1 course-name" style="font-weight: 500; font-size:
                                         1.2rem">${course.name}</p>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <div style="font-size: 0.80rem">
+                                            <div style="font-size: 0.88rem">
                                                 <i class="bi bi-qr-code"></i><i class="ms-1">${course.code}</i>
                                             </div>
                                             <div class="flex-shrink-0">
@@ -140,7 +146,7 @@
                                             </span>
                                             </div>
                                         </div>
-                                        <div class="progress rounded" style="height: 7px;">
+                                        <div class="progress rounded mt-2" style="height: 7px;">
                                             <div class="progress-bar" role="progressbar"
                                                  aria-valuenow=""
                                                  aria-valuemin="0" aria-valuemax="100"></div>

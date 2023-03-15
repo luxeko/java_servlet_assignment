@@ -33,7 +33,7 @@
             <label for="code" class="form-label"><span class="text-danger">*</span>Code</label>
             <input type="text" class="form-control" name="code" id="code">
         </div>
-        <div class="row mb-3">
+        <div class="row mb-3" id="input_time">
             <div class="col-3" id="input_start-time">
                 <label for="start_time" class="form-label"><span class="text-danger">*</span>Start time</label>
                 <input type="date" class="form-control" name="start_time" id="start_time">
@@ -95,6 +95,9 @@
                 return false;
             } else if (!end_time || end_time.trim() === "") {
                 $('#input_end-time').append('<span style="font-size: 13px" class="text-danger error_end-time">*Please enter end time</span>')
+                return false;
+            } else if (start_time >= end_time) {
+                $('#input_time').append('<span style="font-size: 13px" class="text-danger error_end-time">*Please choose a start date that is less than the end date</span>')
                 return false;
             }
             return true;

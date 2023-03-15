@@ -21,10 +21,17 @@ public class MyInfoServlet extends HttpServlet {
         userController = new UserController();
         courseController = new CourseController();
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        int userId = (int) session.getAttribute("userId");
+        int userId;
+        String action = request.getParameter("action");
+        if (action != null && action.equals("preview")) {
+            userId = Integer.parseInt(request.getParameter("id"));
+        } else {
+            userId = (int) session.getAttribute("userId");
+        }
         UserModel userModel = userController.getUserById(userId);
         List<CourseModel> courses = courseController.getCourseByUserId(userId);
         request.setAttribute("user", userModel);
@@ -35,6 +42,6 @@ public class MyInfoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+       
     }
 }

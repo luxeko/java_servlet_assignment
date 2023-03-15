@@ -30,7 +30,7 @@
     session.removeAttribute("success");
 %>
 <div class="container py-5">
-    <div class="mb-3 d-flex justify-content-between align-items-center">
+    <div class="mb-3 d-flex justify-content-between align-items-start">
         <div>
             <a href="UserServlet?action=add" class="btn btn-success"><i class="bi
 		bi-plus-lg"></i> Add user</a>
@@ -66,16 +66,17 @@
                 <td class="align-middle"><c:out value="${user.country}"/></td>
                 <td class="align-middle" style="width: 400px">
                     <c:forEach items="${user.courseName}" var="course">
-                        <span class="badge text-bg-success p-2 mb-1"><c:out value="${course}"></c:out> </span>
+                        <span class="badge text-bg-success p-2 mb-1">${course}</span>
                     </c:forEach>
                 </td>
                 <td class="align-middle">
                     <div class="d-flex justify-content-center align-items-center">
-                        <a href="#" class="btn btn-primary text-white me-2"><i class="bi bi-eye"></i></a>
-                        <a href="#" class="btn btn-warning text-white me-2"><i class="bi bi-pencil"></i></a>
-                        <a onclick="return confirm('Are you sure you want to delete <c:out
-                                value="${user.name}"></c:out>?')"
-                           href="UserServlet?action=delete&id=<c:out value="${user.id}"></c:out>"
+                        <a href="MyInfoServlet?action=preview&id=${user.id}"
+                           class="btn btn-primary text-white me-2"><i class="bi bi-eye"></i></a>
+                        <a href="UserServlet?action=edit&id=${user.id}"
+                           class="btn btn-warning text-white me-2"><i class="bi bi-pencil"></i></a>
+                        <a onclick="return confirm('Are you sure you want to delete ${user.name}?')"
+                           href="UserServlet?action=delete&id=${user.id}"
                            class="btn btn-danger"><i class="bi bi-trash"></i></a>
                     </div>
                 </td>

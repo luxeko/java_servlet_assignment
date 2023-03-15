@@ -44,7 +44,7 @@ for (let i = 0; i < course.length; i++) {
         progress.style.width = (progressWidth) + "%";
 
         const span = document.createElement('span');
-        span.textContent = `Started ${diffOfStartAndCurrentDate - 1} days ago`
+        span.textContent = (diffOfStartAndCurrentDate - 1 > 0) ? `Started ${diffOfStartAndCurrentDate - 1} Days Ago` : `Start Today`
         span.classList.add("ms-2", "badge", "text-bg-success")
         span.style.fontSize = "0.77rem"
         courseName.appendChild(span)

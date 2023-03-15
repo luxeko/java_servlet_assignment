@@ -80,7 +80,10 @@ public class UserServlet extends HttpServlet {
         if (id != null && !id.equals("")) {
             // update
             UserModel userModel = userController.getUserById(Integer.parseInt(id));
-
+            userModel.setName(name);
+            userModel.setCountry(country);
+            userModel.setRole(role);
+            userController.update(userModel);
             session.setAttribute("success", "Update success");
         } else {
             UserModel userModel = new UserModel();

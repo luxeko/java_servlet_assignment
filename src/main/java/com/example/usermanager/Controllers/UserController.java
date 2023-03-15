@@ -85,16 +85,17 @@ public class UserController {
         }
         return users;
     }
+
     public List<UserModel> getUserByRequest(String search) {
         Connection connection = getConnection();
         List<UserModel> users = new ArrayList<>();
         String sql = "select * from users where name LIKE ? or email LIKE ? or country LIKE ? or role LIKE ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, search);
-            preparedStatement.setString(2, search);
-            preparedStatement.setString(3, search);
-            preparedStatement.setString(4, search);
+            preparedStatement.setString(1, "%" + search + "%");
+            preparedStatement.setString(2, "%" + search + "%");
+            preparedStatement.setString(3, "%" + search + "%");
+            preparedStatement.setString(4, "%" + search + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -110,6 +111,7 @@ public class UserController {
         }
         return users;
     }
+
     public void create(UserModel userModel) {
         Connection connection = getConnection();
         String insert = "insert into users(name, email, password, country, role) values(?, ?, ?, ?, ?)";
@@ -172,12 +174,12 @@ public class UserController {
 
     public void update(UserModel userModel) {
         Connection connection = getConnection();
-        String update = "update users set name = ?, country = ?, password = ? where id = ?";
+        String update = "update users set name = ?, country = ?, role = ? where id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(update);
             ps.setString(1, userModel.getName());
             ps.setString(2, userModel.getCountry());
-            ps.setString(3, userModel.getPassword());
+            ps.setString(3, userModel.getRole());
             ps.setInt(4, userModel.getId());
             ps.execute();
             ps.close();
@@ -228,6 +230,7 @@ public class UserController {
         }
         return userModel;
     }
+
     public boolean checkEmailExist(String email) {
         return false;
     }

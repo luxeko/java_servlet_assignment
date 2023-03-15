@@ -79,22 +79,16 @@
                 </td>
                 <td class="align-middle">
                     <div class="d-flex justify-content-center align-items-center">
-                        <c:choose>
-                            <c:when test="${sessionScope.role != null && sessionScope.role == 'admin'}">
-                                <a href="CourseServlet?action=edit&id=<c:out value="${course.id}"></c:out>"
-                                   class="btn btn-warning text-white me-2"><i class="bi bi-pencil"></i></a>
-                                <a onclick="return confirm('Are you sure you want to delete course: <c:out
-                                        value="${course.name}"></c:out>?')"
-                                   href="CourseServlet?action=delete&id=<c:out value="${course.id}"></c:out>"
-                                   class="btn btn-danger"><i class="bi bi-trash"></i></a>
-                            </c:when>
-                            <c:otherwise>
-                                <a onclick="return confirm('Are you sure you want to sign up course: <c:out
-                                        value="${course.name}"></c:out>?')" href="CourseServlet?action=signUp&id=<c:out
-                                value="${course.id}"></c:out>"
-                                   class="btn btn-success text-white me-2"><i class="bi bi-plus-lg"></i> Sign up</a>
-                            </c:otherwise>
-                        </c:choose>
+                        <a onclick="return confirm('Are you sure you want to SIGN UP Course: ${course.name}?')" href="CourseServlet?action=signUp&id=${course.id}"
+                           class="btn btn-success text-white me-2"><i class="bi bi-plus-lg"></i></a>
+                        <c:if test="${sessionScope.role != null && sessionScope.role == 'admin'}">
+                            <a href="CourseServlet?action=edit&id=${course.id}"
+                               class="btn btn-warning text-white me-2"><i class="bi bi-pencil"></i></a>
+                            <a onclick="return confirm('Are you sure you want to DELETE Course: ${course.name}?')"
+                               href="CourseServlet?action=delete&id=${course.id}"
+                               class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                        </c:if>
+
                     </div>
                 </td>
             </tr>

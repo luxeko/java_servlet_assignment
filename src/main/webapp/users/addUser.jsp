@@ -40,8 +40,7 @@
         <div class="mb-3">
             <label for="role" class="form-label">Role</label>
             <select class="form-select" name="role" id="role">
-                <option value="" selected>Choose</option>
-                <option value="student">Student</option>
+                <option value="student" selected>Student</option>
                 <option value="admin">Admin</option>
             </select>
         </div>
