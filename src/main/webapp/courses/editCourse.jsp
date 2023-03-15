@@ -21,7 +21,7 @@
 </head>
 <body>
 <%@include file="../menu.jsp" %>
-<div class="container mt-4">
+<div class="container py-5">
     <h3><a href="CourseServlet" class="text-decoration-none text-success">Courses</a> <i class="bi bi-arrow-right"></i>
         Edit
         course</h3>

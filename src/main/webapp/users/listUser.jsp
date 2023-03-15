@@ -14,6 +14,8 @@
           type="text/css"/>
     <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/newToast.css" rel="stylesheet" type="text/css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
             integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -21,7 +23,13 @@
 </head>
 <body>
 <%@include file="../menu.jsp" %>
-<div class="container mt-4">
+<c:if test="${sessionScope.success != null }">
+    <div id="toast" data-value="${sessionScope.success}"></div>
+</c:if>
+<%
+    session.removeAttribute("success");
+%>
+<div class="container py-5">
     <div class="mb-3 d-flex justify-content-between align-items-center">
         <div>
             <a href="UserServlet?action=add" class="btn btn-success"><i class="bi
@@ -56,13 +64,14 @@
                 <td class="align-middle"><c:out value="${user.email}"/></td>
                 <td class="align-middle"><c:out value="${user.role}"/></td>
                 <td class="align-middle"><c:out value="${user.country}"/></td>
-                <td class="align-middle">
+                <td class="align-middle" style="width: 400px">
                     <c:forEach items="${user.courseName}" var="course">
-                        <span class="badge text-bg-success p-2"><c:out value="${course}"></c:out> </span>
+                        <span class="badge text-bg-success p-2 mb-1"><c:out value="${course}"></c:out> </span>
                     </c:forEach>
                 </td>
                 <td class="align-middle">
                     <div class="d-flex justify-content-center align-items-center">
+                        <a href="#" class="btn btn-primary text-white me-2"><i class="bi bi-eye"></i></a>
                         <a href="#" class="btn btn-warning text-white me-2"><i class="bi bi-pencil"></i></a>
                         <a onclick="return confirm('Are you sure you want to delete <c:out
                                 value="${user.name}"></c:out>?')"
@@ -74,27 +83,21 @@
         </c:forEach>
         </tbody>
     </table>
-    <!-- Modal -->
-    <div class="modal fade" id="modalDetailUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Detail User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/newToast.js"></script>
+<script>
+    const el = document.getElementById('toast')
+    if (el !== null) {
+        toast({
+            title: 'Success',
+            message: el.dataset.value,
+            type: 'success',
+            duration: 5000
+        });
+    }
+</script>
 </body>
 </html>

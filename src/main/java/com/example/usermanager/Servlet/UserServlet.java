@@ -29,10 +29,9 @@ public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
         String action = request.getParameter("action");
+        HttpSession session = request.getSession();
         if (action != null) {
             if (action.equals("add")) {
-                List<CourseModel> listCourse = courseController.getAll();
-                request.setAttribute("listCourse", listCourse);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("users/addUser.jsp");
                 dispatcher.forward(request, response);
             } else if (action.equals("edit")) {
@@ -42,6 +41,7 @@ public class UserServlet extends HttpServlet {
                 dispatcher.forward(request, response);
             } else {
                 userController.delete(Integer.parseInt(id));
+                session.setAttribute("success", "Delete success");
                 response.sendRedirect("UserServlet");
             }
         } else {
@@ -49,7 +49,7 @@ public class UserServlet extends HttpServlet {
             if (search != null && !search.equals("")) {
                 List<UserModel> users = userController.getUserByRequest(search);
                 for (UserModel user: users) {
-                    List<String> array = courseController.getUserCourseByUserId(user.getId());
+                    List<String> array = courseController.getCourseNameByUserId(user.getId());
                     user.setCourseName(array);
                 }
                 request.setAttribute("users", users);
@@ -58,7 +58,7 @@ public class UserServlet extends HttpServlet {
             } else {
                 List<UserModel> users = userController.getAll();
                 for (UserModel user: users) {
-                    List<String> array = courseController.getUserCourseByUserId(user.getId());
+                    List<String> array = courseController.getCourseNameByUserId(user.getId());
                     user.setCourseName(array);
                 }
                 request.setAttribute("users", users);
@@ -76,10 +76,12 @@ public class UserServlet extends HttpServlet {
         String country = request.getParameter("country");
         String role = request.getParameter("role");
         String id = request.getParameter("id");
-
+        HttpSession session = request.getSession();
         if (id != null && !id.equals("")) {
             // update
             UserModel userModel = userController.getUserById(Integer.parseInt(id));
+
+            session.setAttribute("success", "Update success");
         } else {
             UserModel userModel = new UserModel();
             userModel.setEmail(email);
@@ -88,7 +90,7 @@ public class UserServlet extends HttpServlet {
             userModel.setPassword(password);
             userModel.setRole(role);
             userController.create(userModel);
-            int userId = userModel.getId();
+            session.setAttribute("success", "Create success");
         }
         response.sendRedirect("UserServlet");
     }

@@ -151,11 +151,15 @@ public class UserController {
                 String name = resultSet.getString("name");
                 String country = resultSet.getString("country");
                 String password = resultSet.getString("password");
+                String role = resultSet.getString("role");
+                String email = resultSet.getString("email");
 
                 userModel.setId(id);
                 userModel.setName(name);
                 userModel.setCountry(country);
                 userModel.setPassword(password);
+                userModel.setEmail(email);
+                userModel.setRole(role);
             }
             resultSet.close();
             preparedStatement.close();

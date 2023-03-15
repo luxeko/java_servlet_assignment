@@ -36,7 +36,7 @@
                         <c:out value="${sessionScope.current_user}"/>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">My info</a></li>
+                        <li><a class="dropdown-item" href="MyInfoServlet">My info</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="LogoutServlet">Logout</a></li>
                     </ul>

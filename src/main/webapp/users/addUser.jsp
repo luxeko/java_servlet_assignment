@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="description" content=""/>
     <meta name="author" content=""/>
-    <link href="${pageContext.request.contextPath}/css/select.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet"
@@ -22,7 +21,7 @@
 </head>
 <body>
 <%@include file="../menu.jsp" %>
-<div class="container mt-4">
+<div class="container py-5">
     <h3><a href="UserServlet" class="text-decoration-none text-success">Users</a> <i class="bi bi-arrow-right"></i> Add
         user</h3>
     <form action="UserServlet" method="POST" id="createUser" enctype="application/x-www-form-urlencoded">

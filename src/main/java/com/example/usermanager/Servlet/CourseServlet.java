@@ -16,7 +16,7 @@ public class CourseServlet extends HttpServlet {
     CourseController courseController;
 
     @Override
-    public void init() throws ServletException {
+    public void init(){
         courseController = new CourseController();
     }
 
@@ -24,26 +24,36 @@ public class CourseServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
         String action = request.getParameter("action");
+        HttpSession session = request.getSession();
         if (action != null) {
-            if (action.equals("add")) {
-                RequestDispatcher dispatcher = request.getRequestDispatcher("courses/addCourse.jsp");
-                dispatcher.forward(request, response);
-            } else if (action.equals("edit")) {
-                CourseModel courseModel = courseController.getCourseById(Integer.parseInt(id));
-                request.setAttribute("course", courseModel);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("courses/editCourse.jsp");
-                dispatcher.forward(request, response);
-            } else if (action.equals("signIn")) {
-                HttpSession session = request.getSession();
-                int userId = (int) session.getAttribute("userId");
-                courseController.createUserCourse(userId, Integer.parseInt(id));
-                response.sendRedirect("CourseServlet");
-            } else {
-                courseController.delete(Integer.parseInt(id));
-                response.sendRedirect("CourseServlet");
+            switch (action) {
+                case "add": {
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("courses/addCourse.jsp");
+                    dispatcher.forward(request, response);
+                    break;
+                }
+                case "edit": {
+                    CourseModel courseModel = courseController.getCourseById(Integer.parseInt(id));
+                    request.setAttribute("course", courseModel);
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("courses/editCourse.jsp");
+                    dispatcher.forward(request, response);
+                    break;
+                }
+                case "signUp":
+                    int userId = (int) session.getAttribute("userId");
+                    courseController.createUserCourse(userId, Integer.parseInt(id));
+                    session.setAttribute("success", "Sign up success");
+                    response.sendRedirect("CourseServlet");
+                    break;
+                default:
+                    courseController.delete(Integer.parseInt(id));
+                    session.setAttribute("success", "Delete success");
+                    response.sendRedirect("CourseServlet");
+                    break;
             }
         } else {
-            List<CourseModel> courses = courseController.getAll();
+            int userId = (int) session.getAttribute("userId");
+            List<CourseModel> courses = courseController.getAll(userId);
             request.setAttribute("courses", courses);
             RequestDispatcher dispatcher = request.getRequestDispatcher("courses/listCourse.jsp");
             dispatcher.forward(request, response);
@@ -57,7 +67,7 @@ public class CourseServlet extends HttpServlet {
         String start_time = request.getParameter("start_time");
         String end_time = request.getParameter("end_time");
         String id = request.getParameter("id");
-
+        HttpSession session = request.getSession();
         if (id != null && !id.equals("")) {
             // update
             CourseModel courseModel = courseController.getCourseById(Integer.parseInt(id));
@@ -70,6 +80,7 @@ public class CourseServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
             courseController.update(courseModel);
+            session.setAttribute("success", "Update success");
         } else {
             CourseModel courseModel = new CourseModel();
             courseModel.setCode(code);
@@ -81,6 +92,7 @@ public class CourseServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
             courseController.create(courseModel);
+            session.setAttribute("success", "Create success");
         }
         response.sendRedirect("CourseServlet");
     }

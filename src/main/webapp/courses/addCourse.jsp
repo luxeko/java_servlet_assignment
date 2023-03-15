@@ -20,7 +20,7 @@
 </head>
 <body>
 <%@include file="../menu.jsp" %>
-<div class="container mt-4">
+<div class="container py-5">
     <h3><a href="CourseServlet" class="text-decoration-none text-success">Courses</a> <i class="bi bi-arrow-right"></i>
         Add
         course</h3>
@@ -62,19 +62,15 @@
         let end_time = ''
         $('#name').on('input', function () {
             name = $(this).val();
-            console.log(name)
         })
         $('#code').on('input', function () {
             code = $(this).val();
-            console.log(code)
         })
         $('#start_time').on('input', function () {
             start_time = $(this).val();
-            console.log(start_time)
         })
         $('#end_time').on('input', function () {
             end_time = $(this).val();
-            console.log(end_time)
         })
         $('#createCourse').on('submit', function (e) {
             e.preventDefault();

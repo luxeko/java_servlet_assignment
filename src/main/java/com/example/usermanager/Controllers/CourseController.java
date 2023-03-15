@@ -24,9 +24,11 @@ public class CourseController {
         return conn;
     }
 
-    public List<CourseModel> getAll() {
+    public List<CourseModel> getAll(int userId) {
         List<CourseModel> courses = new ArrayList<>();
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("select * from courses");) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement =
+                connection.prepareStatement("SELECT * FROM courses WHERE id NOT IN (SELECT users_courses.courseId FROM users_courses WHERE users_courses.userId = ?);");) {
+            preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -161,10 +163,14 @@ public class CourseController {
         }
     }
 
-    public List<String> getUserCourseByUserId(int userId) {
+    public List<String> getCourseNameByUserId(int userId) {
         Connection connection = getConnection();
         List<String> arrlist = new ArrayList<>();
-        String select = "SELECT courses.name FROM courses INNER JOIN users_courses on courses.id = users_courses" +
+        String select = "SELECT courses.name FROM courses INNER " +
+                "JOIN " +
+                "users_courses on" +
+                " courses.id = " +
+                "users_courses" +
                 ".courseId INNER JOIN users ON users.id = users_courses.userId WHERE users.id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(select);
@@ -187,26 +193,48 @@ public class CourseController {
         }
         return arrlist;
     }
-
-//    public boolean checkSingIn(int courseId, int userId) {
-//        Connection connection = getConnection();
-//        String sql = "select * from users_courses where courseId = ? and userId = ?";
-//        boolean check = false;
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setInt(1, courseId);
-//            ps.setInt(2, userId);
-//            ResultSet resultSet = ps.executeQuery();
-//            while (resultSet.next()) {
-//                check = true;
-//                break;
-//            }
-//            ps.close();
-//            resultSet.close();
-//            connection.close();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return check;
-//    }
+    public List<CourseModel> getCourseByUserId(int userId) {
+        Connection connection = getConnection();
+        List<CourseModel> courses = new ArrayList<>();
+        String select = "SELECT courses.id, courses.name, courses.code, courses.start_time, courses.end_time FROM " +
+                "courses INNER " +
+                "JOIN " +
+                "users_courses on" +
+                " courses.id = " +
+                "users_courses" +
+                ".courseId INNER JOIN users ON users.id = users_courses.userId WHERE users.id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(select);
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String code = resultSet.getString("code");
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                Date end_time = resultSet.getDate("end_time");
+                Date start_time = resultSet.getDate("start_time");
+                CourseModel courseModel = new CourseModel();
+                courseModel.setId(id);
+                courseModel.setCode(code);
+                courseModel.setName(name);
+                courseModel.setStart_time(new java.sql.Date(start_time.getTime()));
+                if (end_time != null) {
+                    courseModel.setEnd_time(new java.sql.Date(end_time.getTime()));
+                }
+                courses.add(courseModel);
+            }
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return courses;
+    }
 }
