@@ -34,7 +34,7 @@
             <label for="code" class="form-label"><span class="text-danger">*</span>Code</label>
             <input type="text" class="form-control" name="code" id="code" value="<c:out value="${course.code}"></c:out>">
         </div>
-        <div class="row mb-3">
+        <div class="row mb-3" id="input_time">
             <div class="col-3" id="input_start-time">
                 <label for="start_time" class="form-label"><span class="text-danger">*</span>Start time</label>
                 <input type="date" class="form-control" name="start_time" id="start_time" value="<c:out
@@ -57,5 +57,55 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        let name = $('#name').val();
+        let code = $('#code').val();
+        let start_time = $('#start_time').val();
+        let end_time = $('#end_time').val();
+        $('#name').on('input', function () {
+            name = $(this).val();
+        })
+        $('#code').on('input', function () {
+            code = $(this).val();
+        })
+        $('#start_time').on('input', function () {
+            start_time = $(this).val();
+        })
+        $('#end_time').on('input', function () {
+            end_time = $(this).val();
+        })
+        $('#updateCourse').on('submit', function (e) {
+            e.preventDefault();
+            $('.error_name').remove();
+            $('.error_code').remove();
+            $('.error_start-time').remove();
+            $('.error_end-time').remove();
+
+            if (handleCheckValid(name, code, start_time, end_time)) {
+                this.submit();
+            }
+        })
+        const handleCheckValid = (name, code, start_time, end_time) => {
+            if (!name || name.trim() === "") {
+                $('#input_name').append('<span style="font-size: 13px" class="text-danger error_name">*Please enter name of course</span>')
+                return false;
+            } else if (!code || code.trim() === "") {
+                $('#input_code').append('<span style="font-size: 13px" class="text-danger error_name">*Please enter code of course</span>')
+                return false;
+            } else if (!start_time || start_time.trim() === "") {
+                $('#input_start-time').append('<span style="font-size: 13px" class="text-danger error_start-time">*Please enter start time</span>')
+                return false;
+            } else if (!end_time || end_time.trim() === "") {
+                $('#input_end-time').append('<span style="font-size: 13px" class="text-danger error_end-time">*Please enter end time</span>')
+                return false;
+            } else if (start_time >= end_time) {
+                $('#input_time').append('<span style="font-size: 13px" class="text-danger error_end-time">*Please choose a start date that is less than the end date</span>')
+                return false;
+            }
+            return true;
+        }
+    })
+</script>
 </body>
 </html>

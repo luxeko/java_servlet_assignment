@@ -61,7 +61,7 @@
         crossorigin="anonymous"></script>
 <script>
     $(document).ready(function () {
-        let name = ''
+        let name =  $('#name').val();
 
         $('#name').on('input', function () {
             name = $(this).val();
