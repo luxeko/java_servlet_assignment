@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
     <title>List Course</title>
@@ -52,47 +53,58 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${courses}" var="course" varStatus="loop">
-            <tr>
-                <th scope="row" class="align-middle"><c:out value="${loop.index + 1}"/></th>
-                <td class="align-middle"><c:out value="${course.name}"/></td>
-                <td class="align-middle"><c:out value="${course.code}"/></td>
-                <td class="align-middle">
-                    <c:choose>
-                        <c:when test="${course.start_time != null}">
-                            <fmt:formatDate pattern="dd-MM-yyyy" value="${course.start_time}"/>
-                        </c:when>
-                        <c:otherwise>
+        <c:choose>
+            <c:when test="${fn:length(courses) > 0}">
+                <c:forEach items="${courses}" var="course" varStatus="loop">
+                    <tr>
+                        <th scope="row" class="align-middle"><c:out value="${loop.index + 1}"/></th>
+                        <td class="align-middle"><c:out value="${course.name}"/></td>
+                        <td class="align-middle"><c:out value="${course.code}"/></td>
+                        <td class="align-middle">
+                            <c:choose>
+                                <c:when test="${course.start_time != null}">
+                                    <fmt:formatDate pattern="dd-MM-yyyy" value="${course.start_time}"/>
+                                </c:when>
+                                <c:otherwise>
 
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-                <td class="align-middle">
-                    <c:choose>
-                        <c:when test="${course.end_time != null}">
-                            <fmt:formatDate pattern="dd-MM-yyyy" value="${course.end_time}"/>
-                        </c:when>
-                        <c:otherwise>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td class="align-middle">
+                            <c:choose>
+                                <c:when test="${course.end_time != null}">
+                                    <fmt:formatDate pattern="dd-MM-yyyy" value="${course.end_time}"/>
+                                </c:when>
+                                <c:otherwise>
 
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-                <td class="align-middle">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <a onclick="return confirm('Are you sure you want to SIGN UP Course: ${course.name}?')" href="CourseServlet?action=signUp&id=${course.id}"
-                           class="btn btn-success text-white me-2"><i class="bi bi-plus-lg"></i></a>
-                        <c:if test="${sessionScope.role != null && sessionScope.role == 'admin'}">
-                            <a href="CourseServlet?action=edit&id=${course.id}"
-                               class="btn btn-warning text-white me-2"><i class="bi bi-pencil"></i></a>
-                            <a onclick="return confirm('Are you sure you want to DELETE Course: ${course.name}?')"
-                               href="CourseServlet?action=delete&id=${course.id}"
-                               class="btn btn-danger"><i class="bi bi-trash"></i></a>
-                        </c:if>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td class="align-middle">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <a onclick="return confirm('Are you sure you want to SIGN UP Course: ${course.name}?')" href="CourseServlet?action=signUp&id=${course.id}"
+                                   class="btn btn-success text-white me-2"><i class="bi bi-plus-lg"></i></a>
+                                <c:if test="${sessionScope.role != null && sessionScope.role == 'admin'}">
+                                    <a href="CourseServlet?action=edit&id=${course.id}"
+                                       class="btn btn-warning text-white me-2"><i class="bi bi-pencil"></i></a>
+                                    <a onclick="return confirm('Are you sure you want to DELETE Course: ${course.name}?')"
+                                       href="CourseServlet?action=delete&id=${course.id}"
+                                       class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                                </c:if>
 
-                    </div>
-                </td>
-            </tr>
-        </c:forEach>
+                            </div>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <tr>
+                    <th colspan="6">
+                        Không có khóa học mới dành cho bạn
+                    </th>
+                </tr>
+            </c:otherwise>
+        </c:choose>
         </tbody>
     </table>
 </div>

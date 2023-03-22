@@ -32,7 +32,7 @@
 <section>
     <div class="container my-5">
         <div class="row" style="height: max-content;">
-            <div class="col-lg-4" style="position: sticky; top: 70px; height: 500px">
+            <div class="col-lg-4" style="position: sticky; top: 10px; height: 500px">
                 <div class="card mb-4" style="box-shadow: -7px 7px 0 #198754;">
                     <div class="card-body text-center">
                         <img src="${pageContext.request.contextPath}/assets/avatar.jpg"

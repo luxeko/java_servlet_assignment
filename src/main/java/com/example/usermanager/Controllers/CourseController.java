@@ -27,7 +27,8 @@ public class CourseController {
     public List<CourseModel> getAll(int userId) {
         List<CourseModel> courses = new ArrayList<>();
         try (Connection connection = getConnection(); PreparedStatement preparedStatement =
-                connection.prepareStatement("SELECT * FROM courses WHERE id NOT IN (SELECT users_courses.courseId FROM users_courses WHERE users_courses.userId = ?);");) {
+                connection.prepareStatement("SELECT * FROM courses WHERE id NOT IN (SELECT users_courses.courseId " +
+                        "FROM users_courses WHERE users_courses.userId = ?) AND end_time > CURRENT_DATE;");) {
             preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
