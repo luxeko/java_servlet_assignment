@@ -37,7 +37,7 @@
         </div>
         <div>
             <form action="UserServlet" method="GET" class="d-flex" role="search">
-                <input class="form-control me-2" name="search" type="search" placeholder="Search..."
+                <input class="form-control me-2" name="search" type="search" id="search_users" placeholder="Search..."
                        aria-label="Search">
                 <button class="btn btn-outline-success me-2" type="submit">Search</button>
                 <a href="UserServlet" class="btn btn-outline-danger" type="submit">Reset</a>
@@ -56,7 +56,7 @@
             <th class="text-center" scope="col">Action</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="tbody_list_user">
         <c:forEach items="${users}" var="user" varStatus="loop">
             <tr>
                 <th scope="row" class="align-middle"><c:out value="${loop.index + 1}"/></th>
